@@ -1,0 +1,194 @@
+﻿background-color: rgb(255, 255, 255)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+color: rgb(34, 34, 34)
+display: inline !important
+float: none
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font: small/normal arial
+font-family: georgia, palatino, serif
+font-family: georgia, palatino, serif
+font-family: georgia, palatino, serif
+font-family: georgia, palatino, serif
+font-family: georgia, palatino, serif
+font-family: georgia, palatino, serif
+font-family: georgia, palatino, serif
+font-family: georgia, palatino, serif
+font-family: georgia, palatino, serif
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-size-adjust: none
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+font-stretch: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+letter-spacing: normal
+text-align: center
+text-align: center
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-indent: 0px
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+text-transform: none
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+-webkit-text-stroke-width: 0px
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+white-space: normal
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
+word-spacing: 0px
