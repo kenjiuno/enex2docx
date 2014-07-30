@@ -1,4 +1,5 @@
-﻿using Novacode;
+﻿using enex2docx.Properties;
+using Novacode;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -47,11 +48,19 @@ namespace enex2docx {
             public String height { get { return elres.Element("height").Value; } }
         }
 
+        [STAThread]
         static void Main(string[] args) {
+            if (Settings.Default.IsUpgraded == false) {
+                Settings.Default.Upgrade();
+                Settings.Default.IsUpgraded = true;
+                Settings.Default.Save();
+            }
+
             if (args.Length >= 1 && args[0] == "/select") {
                 String fpenex;
                 if (args.Length == 1) {
                     OpenFileDialog ofd = new OpenFileDialog();
+                    ofd.FileName = Settings.Default.fpenex;
                     ofd.Filter = "*.enex|*.enex";
                     if (ofd.ShowDialog() != DialogResult.OK) return;
                     fpenex = ofd.FileName;
@@ -61,8 +70,15 @@ namespace enex2docx {
                 }
                 FolderBrowserDialog fbd = new FolderBrowserDialog();
                 fbd.Description = "保存先のフォルダを選択してください。";
+                fbd.SelectedPath = Settings.Default.dir;
                 if (fbd.ShowDialog() != DialogResult.OK) return;
                 new Program().Run(fpenex, fbd.SelectedPath);
+                if (MessageBox.Show("変換が完了しました。\n\n今回使った設定を保存しますか。", "enex2docx", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes) {
+                    Settings.Default.fpenex = fpenex;
+                    Settings.Default.dir = fbd.SelectedPath;
+                    Settings.Default.Save();
+                    MessageBox.Show("保存しました。", "enexdocx", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
                 return;
             }
             if (args.Length < 2) {
