@@ -2,6 +2,11 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "enex2docx", "enex2docx.csproj", "{B5C9009C-68B6-4F54-B1BF-79CF8CA14A9F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E863D072-AA8B-4108-B5F1-785241B37F67} = {E863D072-AA8B-4108-B5F1-785241B37F67}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocX", "docx\DocX\DocX.csproj", "{E863D072-AA8B-4108-B5F1-785241B37F67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +18,10 @@ Global
 		{B5C9009C-68B6-4F54-B1BF-79CF8CA14A9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5C9009C-68B6-4F54-B1BF-79CF8CA14A9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5C9009C-68B6-4F54-B1BF-79CF8CA14A9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E863D072-AA8B-4108-B5F1-785241B37F67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E863D072-AA8B-4108-B5F1-785241B37F67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E863D072-AA8B-4108-B5F1-785241B37F67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E863D072-AA8B-4108-B5F1-785241B37F67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
