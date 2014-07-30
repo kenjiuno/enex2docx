@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace enex2docx {
@@ -47,13 +48,33 @@ namespace enex2docx {
         }
 
         static void Main(string[] args) {
+            if (args.Length >= 1 && args[0] == "/select") {
+                String fpenex;
+                if (args.Length == 1) {
+                    OpenFileDialog ofd = new OpenFileDialog();
+                    ofd.Filter = "*.enex|*.enex";
+                    if (ofd.ShowDialog() != DialogResult.OK) return;
+                    fpenex = ofd.FileName;
+                }
+                else {
+                    fpenex = args[1];
+                }
+                FolderBrowserDialog fbd = new FolderBrowserDialog();
+                fbd.Description = "保存先のフォルダを選択してください。";
+                if (fbd.ShowDialog() != DialogResult.OK) return;
+                new Program().Run(fpenex, fbd.SelectedPath);
+                return;
+            }
             if (args.Length < 2) {
                 helpYa();
                 Environment.ExitCode = 1;
                 return;
             }
-            String dir = args[1];
-            XDocument enex = XDocument.Load(args[0]);
+            new Program().Run(args[0], args[1]);
+        }
+
+        private void Run(String fpenex, String dir) {
+            XDocument enex = XDocument.Load(fpenex);
             var notes = enex.Elements("en-export").Elements("note");
             Fnno fnno = new Fnno();
             foreach (var note in notes) {
@@ -108,20 +129,20 @@ namespace enex2docx {
                 foreach (var kv in dict) kv.Value.Add(p);
             }
 
-            private Paragraph LPara() {
+            private Paragraph RootPara() {
                 if (p == null)
                     p = doc.InsertParagraph();
                 return p;
             }
 
+            internal void Newl() {
+                Para().AppendLine();
+            }
+
             private Paragraph Para() {
                 if (al.Count != 0)
                     return al[al.Count - 1];
-                return LPara();
-            }
-
-            internal void Newl() {
-                Para().AppendLine();
+                return RootPara();
             }
 
             internal void AddPic(MemoryStream si, int cx, int cy) {
@@ -182,8 +203,14 @@ namespace enex2docx {
                     Match M = Regex.Match("" + dict["background-color"], "rgb\\s*\\(\\s*(?<r>\\d+)\\s*,\\s*(?<g>\\d+)\\s*,\\s*(?<b>\\d+)\\s*\\)");
                     if (M.Success) {
                         Color c = Color.FromArgb(int.Parse(M.Groups["r"].Value), int.Parse(M.Groups["g"].Value), int.Parse(M.Groups["b"].Value));
-                        foreach (var p in alp) p.Highlight(Highlight.yellow);
+                        foreach (var p in alp) p.Highlight(GUt.Guess(c));
                     }
+                }
+            }
+
+            class GUt {
+                internal static Highlight Guess(Color c) {
+                    return Highlight.yellow;
                 }
             }
 
@@ -195,6 +222,7 @@ namespace enex2docx {
 
             internal void L(bool bull) {
                 list = doc.AddList(" ", 0, bull ? ListItemType.Bulleted : ListItemType.Numbered);
+                lind = 0;
             }
             internal void LEnd() {
                 doc.InsertList(list);
@@ -248,6 +276,7 @@ namespace enex2docx {
                 tbl = null;
                 foreach (Paragraph p in tpused) al.Remove(p);
                 tpused.Clear();
+                Newp();
             }
 
             internal void Horzline() {
@@ -318,7 +347,7 @@ namespace enex2docx {
                                 if (face.Length != 0) p.Font(new FontFamily(face));
                                 String color = Utatt.Get(el, "color");
                                 if (color.Length != 0) {
-                                    Match M = Regex.Match(color, "^(?<R>[0-9a-f]{2})(?<G>[0-9a-f]{2})(?<B>[0-9a-f]{2})$", RegexOptions.IgnoreCase);
+                                    Match M = Regex.Match(color, "^#?(?<R>[0-9a-f]{2})(?<G>[0-9a-f]{2})(?<B>[0-9a-f]{2})$", RegexOptions.IgnoreCase);
                                     if (M.Success) {
                                         p.Color(Color.FromArgb(
                                             Convert.ToByte(M.Groups["R"].Value, 16),
