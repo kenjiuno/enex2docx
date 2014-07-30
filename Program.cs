@@ -86,6 +86,7 @@ namespace enex2docx {
                 Res1[] reses = ResUt.Parse(note);
                 using (DocX doc = DocX.Create(fpdocx)) {
                     WDoc wd = new WDoc { doc = doc };
+                    //new XUt { }.Walk(elroot.Nodes());
                     new WUt { wd = wd, reses = reses }.Walk(elroot.Nodes(), 0);
                     doc.Save();
                 }
@@ -213,7 +214,45 @@ namespace enex2docx {
 
 
             internal void Blockquote() {
-                LPara().IndentationBefore += 0.4f;
+                //LPara().IndentationBefore += 0.4f;
+            }
+
+            Table tbl;
+            int tbly = 0, tblx = 0;
+            Row tr;
+
+            internal void NewTbl() {
+                tbl = doc.AddTable(1, 1);
+                tbly = 0;
+            }
+
+            internal void Tr() {
+                while (tbly >= tbl.RowCount) tbl.InsertRow();
+                tr = tbl.Rows[tbly];
+                tblx = 0;
+                tbly++;
+            }
+
+            List<Paragraph> tpused = new List<Paragraph>();
+
+            internal void Td() {
+                while (tblx >= tbl.ColumnCount) tbl.InsertColumn();
+                var p = tr.Cells[tblx].Paragraphs.First();
+                tpused.Add(p);
+                al.Add(p);
+                tblx++;
+            }
+
+            internal void AddTbl() {
+                doc.InsertTable(tbl);
+                tbl = null;
+                foreach (Paragraph p in tpused) al.Remove(p);
+                tpused.Clear();
+            }
+
+            internal void Horzline() {
+                Newp();
+                Str("---");
             }
         }
 
@@ -323,10 +362,23 @@ namespace enex2docx {
                             Walk(el.Nodes(), depth + 1);
                         }
                         else if (el.Name == "table") {
-                            //todo
+                            wd.NewTbl();
+                            Walk(el.Nodes(), depth + 1);
+                            wd.AddTbl();
+                        }
+                        else if (el.Name == "tbody") {
+                            Walk(el.Nodes(), depth + 1);
+                        }
+                        else if (el.Name == "tr") {
+                            wd.Tr();
+                            Walk(el.Nodes(), depth + 1);
+                        }
+                        else if (el.Name == "td") {
+                            wd.Td();
+                            Walk(el.Nodes(), depth + 1);
                         }
                         else if (el.Name == "hr") {
-                            //todo
+                            wd.Horzline();
                         }
                         else if (el.Name == "a") {
                             String href = Utatt.Get(el, "href");
@@ -380,6 +432,144 @@ namespace enex2docx {
 
         static void helpYa() {
             Console.Error.WriteLine("enex2docx <a.enex> <out folder>");
+        }
+
+
+
+
+        class XUt {
+            XDocument xmlo = new XDocument();
+            XElement elroot;
+
+            public XUt Walk(IEnumerable<XNode> nodes) {
+                xmlo.Add(elroot = new XElement("note"));
+                Walk(nodes, null, 0);
+                return this;
+            }
+
+            private void Walk(IEnumerable<XNode> nodes, XElement Welline, int d) {
+                foreach (XNode xn in nodes) {
+                    if (Welline == null) {
+                        Welline = new XElement("line");
+                        elroot.Add(Welline);
+                    }
+
+                    XElement el = xn as XElement;
+                    XText xt = xn as XText;
+                    if (el != null) {
+                        if (el.Name == "en-todo") {
+                            Welline.Add(new XElement(el));
+                            continue;
+                        }
+                        XElement Wel2;
+                        Welline.Add(Wel2 = ApplyStyle(new XElement("style"), el.Attribute("style")));
+
+                        if (el.Name == "b") {
+                            Wel2.SetAttributeValue("b", "1");
+                        }
+                        else if (el.Name == "i") {
+                            Wel2.SetAttributeValue("i", "1");
+                        }
+                        else if (el.Name == "u") {
+                            Wel2.SetAttributeValue("u", "1");
+                        }
+                        else if (el.Name == "strike") {
+                            Wel2.SetAttributeValue("strike", "1");
+                        }
+                        else if (el.Name == "div" || el.Name == "span") {
+
+                        }
+                        else if (el.Name == "ul") {
+                            Wel2.Name = "ul";
+                        }
+                        else if (el.Name == "ol") {
+                            Wel2.Name = "ul";
+                        }
+                        else if (el.Name == "li") {
+                            Wel2.Name = "li";
+                        }
+                        else if (el.Name == "br") {
+                            Wel2.Name = "br";
+                        }
+                        else if (el.Name == "table") {
+                            Wel2.Name = "table";
+                        }
+                        else if (el.Name == "tbody") {
+                            Wel2.Name = "tbody";
+                        }
+                        else if (el.Name == "tr") {
+                            Wel2.Name = "tr";
+                        }
+                        else if (el.Name == "td") {
+                            Wel2.Name = "td";
+                        }
+                        else if (el.Name == "hr") {
+                            Wel2.Name = "hr";
+                        }
+                        else if (el.Name == "a") {
+                            Wel2.Name = "a";
+                        }
+                        else if (el.Name == "blockquote") {
+                            Wel2.SetAttributeValue("indent", "1");
+                        }
+                        else if (el.Name == "font") {
+                            String face = Utatt.Get(el, "face");
+                            if (face.Length != 0) Wel2.SetAttributeValue("face", face);
+                            String color = Utatt.Get(el, "color");
+                            if (color.Length != 0) {
+                                Match M = Regex.Match(color, "^(?<R>[0-9a-f]{2})(?<G>[0-9a-f]{2})(?<B>[0-9a-f]{2})$", RegexOptions.IgnoreCase);
+                                if (M.Success) {
+                                    Wel2.SetAttributeValue("fg", (Color.FromArgb(
+                                        Convert.ToByte(M.Groups["R"].Value, 16),
+                                        Convert.ToByte(M.Groups["G"].Value, 16),
+                                        Convert.ToByte(M.Groups["B"].Value, 16)
+                                        )));
+                                }
+                            }
+
+                        }
+                        else throw new NotSupportedException("" + el);
+
+                        Walk(el.Nodes(), Wel2, d + 1);
+                    }
+                    else if (xt != null) {
+                        Welline.Add(new XElement("text", new XText(xt)));
+                    }
+                    else throw new NotSupportedException("" + xn);
+                }
+            }
+
+            private XElement ApplyStyle(XElement el, XAttribute xaStyle) {
+                if (xaStyle != null) {
+                    String style = xaStyle.Value;
+
+                    System.Collections.SortedList dict = new System.Collections.SortedList();
+                    foreach (string row in style.Split(';')) {
+                        string[] cols = row.Split(new char[] { ':' }, 2);
+                        if (cols.Length == 2) {
+                            dict[cols[0].Trim()] = cols[1].Trim();
+                        }
+                    }
+
+                    //foreach (var kv in dict) System.Diagnostics.Debug.WriteLine("# " + kv.Key + ": " + kv.Value);
+
+                    {
+                        Match M = Regex.Match("" + dict["color"], "rgb\\s*\\(\\s*(?<r>\\d+)\\s*,\\s*(?<g>\\d+)\\s*,\\s*(?<b>\\d+)\\s*\\)");
+                        if (M.Success) {
+                            Color c = Color.FromArgb(int.Parse(M.Groups["r"].Value), int.Parse(M.Groups["g"].Value), int.Parse(M.Groups["b"].Value));
+                            el.SetAttributeValue("fg", c.ToArgb());
+                        }
+                    }
+                    {
+                        Match M = Regex.Match("" + dict["background-color"], "rgb\\s*\\(\\s*(?<r>\\d+)\\s*,\\s*(?<g>\\d+)\\s*,\\s*(?<b>\\d+)\\s*\\)");
+                        if (M.Success) {
+                            Color c = Color.FromArgb(int.Parse(M.Groups["r"].Value), int.Parse(M.Groups["g"].Value), int.Parse(M.Groups["b"].Value));
+                            el.SetAttributeValue("bg", c.ToArgb());
+                        }
+                    }
+                }
+                return el;
+            }
         }
     }
 }
