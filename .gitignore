@@ -172,3 +172,6 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+/Setup_enex2docx_0_1.exe
+
+/docx/.svn
